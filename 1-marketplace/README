@@ -1,0 +1,38 @@
+Nume: Radu-Andrei Dumitrescu
+Grupă: 332CA
+
+# Tema 1
+
+Organizare
+-
+1. Explicație pentru soluția aleasă:
+
+* pentru datasetul din marketplace am ales o solutie simpla cu 2 array-ul, unul pentru toate carturile si unul pentru toti producerii
+* fiecare cart are un array de produse
+* fiecare producator are un array de produse
+
+
+
+Implementare
+-
+
+* am implementat in marketplace clasic cu array manipulation
+
+
+Resurse utilizate
+-
+
+* https://docs.python.org/3/library/unittest.html
+* https://stackoverflow.com/questions/40088496/how-to-use-pythons-rotatingfilehandler
+* https://stackoverflow.com/questions/13733552/logger-configuration-to-log-to-file-and-print-to-stdout
+
+Git
+-
+
+* https://github.com/radu1122/ASC
+
+Observatii:
+-
+
+* Mi se pare utila tema pentru a intelege mai bine cum se lucreaza intr-un mediu de prod
+* Timp de realizare aproximativ 2h
