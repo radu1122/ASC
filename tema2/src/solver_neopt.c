@@ -45,7 +45,7 @@ double* my_solver(int N, double *A, double* B) {
 	memset(BXA, 0, N * N * sizeof(double));
 	for (int i = 0; i < N; i++) {
 		for (int j = 0; j < N; j++) {
-			// k will go only to j because A is triangular
+			// k will go only to j because A is upper triangular
 			for (int k = 0; k <= j; k++) {
 				BXA[i * N + j] = BXA[i * N + j] + B[i * N + k] * A[k * N + j];
 			}
@@ -57,7 +57,8 @@ double* my_solver(int N, double *A, double* B) {
 	memset(BXAXAT, 0, N * N * sizeof(double));
 	for (int i = 0; i < N; i++) {
 		for (int j = 0; j < N; j++) {
-			for (int k = 0; k < N; k++) {
+			// k will start with j because A is lower triangular
+			for (int k = j; k < N; k++) {
 				BXAXAT[i * N + j] = BXAXAT[i * N + j] + BXA[i * N + k] * AT[k * N + j];
 			}
 		}
