@@ -14,7 +14,7 @@ double* my_solver(int N, double *A, double* B) {
 	memset(AT, 0, N * N * sizeof(double));
 	for (int i = 0; i < N; i++) {
 		for (int j = i; j < N; j++) {
-			AT[i][j] = A[j][i];
+			AT[i * N + j] = A[j * N + i];
 		}
 	}
 
@@ -23,7 +23,7 @@ double* my_solver(int N, double *A, double* B) {
 	memset(BT, 0, N * N * sizeof(double));
 	for (int i = 0; i < N; i++) {
 		for (int j = 0; j < N; j++) {
-			BT[i][j] = B[j][i];
+			BT[i * N + j] = B[j * N + i];
 		}
 	}
 
@@ -34,9 +34,9 @@ double* my_solver(int N, double *A, double* B) {
 		for (int j = 0; j < N; j++) {
 			register double sum = 0.0;
 			for (int k = 0; k < N; k++) {
-				sum = sum + BT[i][k] * B[k][j];
+				sum = sum + BT[i * N + k] * B[k * N + j];
 			}
-			BTXB[i][j] = sum;
+			BTXB[i * N + j] = sum;
 		}
 	}
 
@@ -47,9 +47,9 @@ double* my_solver(int N, double *A, double* B) {
 		for (int j = 0; j < N; j++) {
 			register double sum = 0.0;
 			for (int k = 0; k <= i; k++) {
-				sum = sum + B[i][k] * A[k][j];
+				sum = sum + B[i * N + k] * A[k * N + j];
 			}
-			BXA[i][j] = sum;
+			BXA[i * N + j] = sum;
 		}
 	}
 
@@ -60,9 +60,9 @@ double* my_solver(int N, double *A, double* B) {
 		for (int j = 0; j < N; j++) {
 			register double sum = 0.0;
 			for (int k = 0; k < N; k++) {
-				sum = sum + BXA[i][k] * AT[k][j];
+				sum = sum + BXA[i * N + k] * AT[k * N + j];
 			}
-			BXAXAT[i][j] = sum;
+			BXAXAT[i * N + j] = sum;
 		}
 	}
 
@@ -71,7 +71,7 @@ double* my_solver(int N, double *A, double* B) {
 	memset(result, 0, N * N * sizeof(double));
 	for (int i = 0; i < N; i++) {
 		for (int j = 0; j < N; j++) {
-			result[i][j] = BXAXAT[i][j] + BTXB[i][j];
+			result[i * N + j] = BXAXAT[i * N + j] + BTXB[i * N + j];
 		}
 	}
 
