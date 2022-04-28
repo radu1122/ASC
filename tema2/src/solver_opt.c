@@ -48,8 +48,8 @@ double* my_solver(int N, double *A, double* B) {
 	for (int i = 0; i < N; i++) {
 		for (int j = 0; j < N; j++) {
 			register double sum = 0.0;
-			// k will go only to i because A is triangular
-			for (int k = 0; k <= i; k++) {
+			// k will go only to j because A is upper triangular
+			for (int k = 0; k <= j; k++) {
 				sum = sum + B[i * N + k] * A[k * N + j];
 			}
 			BXA[i * N + j] = sum;
@@ -62,7 +62,8 @@ double* my_solver(int N, double *A, double* B) {
 	for (int i = 0; i < N; i++) {
 		for (int j = 0; j < N; j++) {
 			register double sum = 0.0;
-			for (int k = 0; k < N; k++) {
+			// k will start with j because A is lower triangular
+			for (int k = j; k < N; k++) {
 				sum = sum + BXA[i * N + k] * AT[k * N + j];
 			}
 			BXAXAT[i * N + j] = sum;
