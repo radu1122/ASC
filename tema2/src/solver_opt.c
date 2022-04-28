@@ -10,21 +10,21 @@
  */
 double* my_solver(int N, double *A, double* B) {
 
-	// A transpose
-	double *AT = (double*)malloc(N * N * sizeof(double));
-	memset(AT, 0, N * N * sizeof(double));
+
 	for (int i = 0; i < N; i++) {
 		// j will start from i because we want to transpose the upper triangular part of A
 		for (int j = i; j < N; j++) {
-			AT[j * N + i] = A[i * N + j];
 		}
 	}
-
+	// A transpose
 	// B transpose
+	double *AT = (double*)malloc(N * N * sizeof(double));
 	double *BT = (double*)malloc(N * N * sizeof(double));
+	memset(AT, 0, N * N * sizeof(double));
 	memset(BT, 0, N * N * sizeof(double));
 	for (int i = 0; i < N; i++) {
 		for (int j = 0; j < N; j++) {
+			AT[j * N + i] = A[i * N + j];
 			BT[j * N + i] = B[i * N + j];
 		}
 	}
@@ -34,9 +34,14 @@ double* my_solver(int N, double *A, double* B) {
 	memset(BTXB, 0, N * N * sizeof(double));
 	for (int i = 0; i < N; i++) {
 		for (int j = 0; j < N; j++) {
+			register double *a = &BT[i * N] + i;
+			register double *b = &B[i * N + j];
+
 			register double sum = 0.0;
 			for (int k = 0; k < N; k++) {
-				sum = sum + BT[i * N + k] * B[k * N + j];
+				sum = sum + *a * *b;
+				a++;
+				b += N;
 			}
 			BTXB[i * N + j] = sum;
 		}
@@ -47,10 +52,15 @@ double* my_solver(int N, double *A, double* B) {
 	memset(BXA, 0, N * N * sizeof(double));
 	for (int i = 0; i < N; i++) {
 		for (int j = 0; j < N; j++) {
+			register double *a = &B[i * N] + i;
+			register double *b = &A[i * N + j];
+
 			register double sum = 0.0;
 			// k will go only to j because A is upper triangular
 			for (int k = 0; k <= j; k++) {
-				sum = sum + B[i * N + k] * A[k * N + j];
+				sum = sum + *a * *b;
+				a++;
+				b += N;
 			}
 			BXA[i * N + j] = sum;
 		}
@@ -61,10 +71,15 @@ double* my_solver(int N, double *A, double* B) {
 	memset(BXAXAT, 0, N * N * sizeof(double));
 	for (int i = 0; i < N; i++) {
 		for (int j = 0; j < N; j++) {
+			register double *a = &B[i * N] + i;
+			register double *b = &A[i * N + j];
+
 			register double sum = 0.0;
 			// k will start with j because A is lower triangular
 			for (int k = j; k < N; k++) {
-				sum = sum + BXA[i * N + k] * AT[k * N + j];
+				sum = sum + *a * *b;
+				a++;
+				b += N;
 			}
 			BXAXAT[i * N + j] = sum;
 		}
