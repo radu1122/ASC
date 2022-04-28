@@ -81,24 +81,24 @@ double* my_solver(int N, double *A, double* B) {
 				a++;
 				b += N;
 			}
-			BXAXAT[i * N + j] = sum;
+			BXAXAT[i * N + j] = sum + BTXB[i * N + j];
 		}
 	}
 
-	// BXAXAT + BTXB
-	double *result = (double*)malloc(N * N * sizeof(double));
-	memset(result, 0, N * N * sizeof(double));
-	for (int i = 0; i < N; i++) {
-		for (int j = 0; j < N; j++) {
-			result[i * N + j] = BXAXAT[i * N + j] + BTXB[i * N + j];
-		}
-	}
+	// // BXAXAT + BTXB
+	// double *result = (double*)malloc(N * N * sizeof(double));
+	// memset(result, 0, N * N * sizeof(double));
+	// for (int i = 0; i < N; i++) {
+	// 	for (int j = 0; j < N; j++) {
+	// 		result[i * N + j] = BXAXAT[i * N + j] + BTXB[i * N + j];
+	// 	}
+	// }
 
 	free(AT);
 	free(BT);
 	free(BTXB);
 	free(BXA);
-	free(BXAXAT);
+	// free(BXAXAT);
 	
-	return result;
+	return BXAXAT;
 }
