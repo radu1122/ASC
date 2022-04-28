@@ -15,7 +15,7 @@ double* my_solver(int N, double *A, double* B) {
 	memset(AT, 0, N * N * sizeof(double));
 	for (int i = 0; i < N; i++) {
 		for (int j = i; j < N; j++) {
-			AT[i * N + j] = A[j * N + i];
+			AT[j * N + i] = A[i * N + j];
 		}
 	}
 
@@ -24,7 +24,7 @@ double* my_solver(int N, double *A, double* B) {
 	memset(BT, 0, N * N * sizeof(double));
 	for (int i = 0; i < N; i++) {
 		for (int j = 0; j < N; j++) {
-			BT[i * N + j] = B[j * N + i];
+			BT[j * N + i] = B[i * N + j];
 		}
 	}
 

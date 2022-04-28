@@ -14,8 +14,8 @@ double* my_solver(int N, double *A, double* B) {
 	double *AT = (double*)malloc(N * N * sizeof(double));
 	memset(AT, 0, N * N * sizeof(double));
 	for (int i = 0; i < N; i++) {
-		for (int j = i; j < N; j++) {
-			AT[i * N + j] = A[j * N + i];
+		for (int j = 0; j < N; j++) {
+			AT[j * N + i] = A[i * N + j];
 		}
 	}
 
@@ -24,7 +24,7 @@ double* my_solver(int N, double *A, double* B) {
 	memset(BT, 0, N * N * sizeof(double));
 	for (int i = 0; i < N; i++) {
 		for (int j = 0; j < N; j++) {
-			BT[i * N + j] = B[j * N + i];
+			BT[j * N + i] = B[i * N + j];
 		}
 	}
 
@@ -44,7 +44,7 @@ double* my_solver(int N, double *A, double* B) {
 	memset(BXA, 0, N * N * sizeof(double));
 	for (int i = 0; i < N; i++) {
 		for (int j = 0; j < N; j++) {
-			for (int k = 0; k <= i; k++) {
+			for (int k = 0; k < N; k++) {
 				BXA[i * N + j] = BXA[i * N + j] + B[i * N + k] * A[k * N + j];
 			}
 		}
