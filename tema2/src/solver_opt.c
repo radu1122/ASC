@@ -71,8 +71,8 @@ double* my_solver(int N, double *A, double* B) {
 	memset(BXAXAT, 0, N * N * sizeof(double));
 	for (int i = 0; i < N; i++) {
 		for (int j = 0; j < N; j++) {
-			register double *a = &B[i * N] + j;
-			register double *b = &A[j * N + j];
+			register double *a = &BXA[i * N + j];
+			register double *b = &AT[j * N + j];
 
 			register double sum = 0.0;
 			// k will start with j because A is lower triangular
