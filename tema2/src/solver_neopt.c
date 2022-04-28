@@ -14,7 +14,7 @@ double* my_solver(int N, double *A, double* B) {
 	double *AT = (double*)malloc(N * N * sizeof(double));
 	memset(AT, 0, N * N * sizeof(double));
 	for (int i = 0; i < N; i++) {
-		for (int j = 0; j < N; j++) {
+		for (int j = i; j < N; j++) {
 			AT[j * N + i] = A[i * N + j];
 		}
 	}
@@ -44,6 +44,7 @@ double* my_solver(int N, double *A, double* B) {
 	memset(BXA, 0, N * N * sizeof(double));
 	for (int i = 0; i < N; i++) {
 		for (int j = 0; j < N; j++) {
+			// k will go only to i because A is triangular
 			for (int k = 0; k <= i; k++) {
 				BXA[i * N + j] = BXA[i * N + j] + B[i * N + k] * A[k * N + j];
 			}
