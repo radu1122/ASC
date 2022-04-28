@@ -3,6 +3,7 @@
  * 2022 Spring
  */
 #include "utils.h"
+#include <string.h>
 
 /*
  * Add your optimized implementation here
