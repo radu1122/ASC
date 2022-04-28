@@ -81,7 +81,7 @@ double* my_solver(int N, double *A, double* B) {
 				a++;
 				b += N;
 			}
-			BXAXAT[i * N + j] = sum + BTXB[i * N + j];
+			BXAXAT[i * N + j] = sum;
 		}
 	}
 
