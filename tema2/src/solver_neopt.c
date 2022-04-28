@@ -14,6 +14,7 @@ double* my_solver(int N, double *A, double* B) {
 	double *AT = (double*)malloc(N * N * sizeof(double));
 	memset(AT, 0, N * N * sizeof(double));
 	for (int i = 0; i < N; i++) {
+		// j will start from i because we want to transpose the upper triangular part of A
 		for (int j = i; j < N; j++) {
 			AT[j * N + i] = A[i * N + j];
 		}
