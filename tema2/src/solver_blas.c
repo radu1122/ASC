@@ -22,9 +22,6 @@ double* my_solver(int N, double *A, double *B) {
 	cblas_dtrmm(CblasRowMajor, CblasRight, CblasUpper, CblasNoTrans, CblasNonUnit, N, N, 1, A, N, BXA, N);
 	
 	// BXAXAT + BTXB
-	double *BXAXAT = (double*)malloc(N * N * sizeof(double));
-	memset(BXAXAT, 0, N * N * sizeof(double));
-
 	double *result = (double*)malloc(N * N * sizeof(double));
 	memset(result, 0, N * N * sizeof(double));
 	cblas_dcopy(N * N, BTXB, 1, result, 1);
@@ -32,7 +29,6 @@ double* my_solver(int N, double *A, double *B) {
 
 	free(BTXB);
 	free(BXA);
-	free(BXAXAT);
 
 	return result;
 
