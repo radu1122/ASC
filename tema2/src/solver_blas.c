@@ -19,7 +19,7 @@ double* my_solver(int N, double *A, double *B) {
 	double *BXA = (double*)malloc(N * N * sizeof(double));
 	memset(BXA, 0, N * N * sizeof(double));
 	cblas_dcopy(N * N, B, 1, BXA, 1);
-	cblas_dtrmm(CblasRowMajor, CblasRight, CblasUpper, CblasTrans, CblasNonUnit, N, N, 1, A, N, BXA, N);
+	cblas_dtrmm(CblasRowMajor, CblasRight, CblasUpper, CblasNoTrans, CblasNonUnit, N, N, 1, A, N, BXA, N);
 	
 	// BXAXAT + BTXB
 	double *BXAXAT = (double*)malloc(N * N * sizeof(double));
