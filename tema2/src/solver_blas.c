@@ -4,6 +4,7 @@
  */
 #include "utils.h"
 #include <cblas.h>
+#include <string.h>
 /* 
  * Add your BLAS implementation here
  */
