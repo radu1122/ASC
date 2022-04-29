@@ -1,0 +1,15 @@
+==2408031== Memcheck, a memory error detector
+==2408031== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==2408031== Using Valgrind-3.18.1 and LibVEX; rerun with -h for copyright info
+==2408031== Command: ./tema2_blas /export/asc/tema2/input_valgrind
+==2408031== 
+Run=./tema2_blas: N=400: Time=3.950846
+==2408031== 
+==2408031== HEAP SUMMARY:
+==2408031==     in use at exit: 0 bytes in 0 blocks
+==2408031==   total heap usage: 59 allocs, 59 frees, 11,675,748 bytes allocated
+==2408031== 
+==2408031== All heap blocks were freed -- no leaks are possible
+==2408031== 
+==2408031== For lists of detected and suppressed errors, rerun with: -s
+==2408031== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
