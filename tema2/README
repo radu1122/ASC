@@ -1,0 +1,105 @@
+Copyright Radu-Andrei Dumitrescu 332CA 2022
+
+Implementare:
+  1. Neopt
+    - am implementat o varianta bruta fara niciun fel de optimizare
+    - singurul lucru de care am tinut cont a fost ca A este matrice superior triunghiulara
+    - am impartit fiecare operatie si le-am calculat separat
+    - toate matricile folosite le-am alocat ca un vector pentru a avea liniaritate in memorie
+    - am calculat transpusa celor 2 matrice printr-o trecere simpla cu i si j,
+      folosind formula: AT[j * N + i] = A[i * N + j]
+    - pentru transpusa lui A am plecat cu j de la i pentru ca ne interesa doar partea de sus a matricei
+    - pentru a calcula BT * B am folosit algoritmul clasic cu 3 for-uri si formula:
+      BTXB[i * N + j] = BTXB[i * N + j] + BT[i * N + k] * B[k * N + j]
+    - pentru a calcula B * A am folosit aceeasi formula. Singura diferenta a fost ca al3lea for
+      merge doar pana la j avand in vedere proprietatile lui A
+    - pentru a calcula (B*A) * AT am folosit acelasi algoritm ca si la BT * B. Diferenta a fost sa inceapa
+      k de la j
+    - rezultatele celor 2 inmultiri rezultate le-am adunat pentru a ajunge la matricea finala
+    - toate matricile au fost alocate in memorie ca vectori folosing malloc, la final nu am avut niciun memory leak
+  2. Opt_m
+    - s-a bazat 100% pe varianta neopt
+    - diferentele au fost pentru a optimiza timpul de executie
+    - desi optimizarile au fost minore, timpul de executie a scazut considerabil pentru testul N=1200
+    - prima optimizare a fost sa fac transpusa celor 2 matrici o singura bucata de 2 for-uri
+    - a doua optimizare a fost sa folosesc un register pentru sumele partiale la inmultirea matricilor
+    - a3a optimizare a fost sa folosesc direct pointeri si adunare de adrese de memorie pentru a itera prin matrice
+      la calcului sumei pentru inmultire
+    - toate aceste optimizare m-au dus la un timp de aproximativ 11secunde pentru N=1200
+    - o a4a optimizare pe care as vedea-o, dar pe care nu am reusit sa o implementez este aceea de a nu mai calcula 
+      intr-un pas intermediar transpusele celor 2 si direct la inmultirea lor
+  3. Blas
+    - unul dintre cele mai mari challenge-uri aici a fost sa inteleg documentatia BLAS
+    - in final tot codul s-a rezumat la 3 apeluri de BLAS, cu un timp de aproximativ 1.1secunde pentru N=1200
+    - BT * B am calculat folosind cblas_dgemm care face intr-un singur pas si transpusa
+    - pentru B * A am folosit cblas_dtrmm care foloseste o optimizare pentru matricele superior triunghiulare
+    - B * A * AT + BT * B am putut calcula folosind o singura data cblas_dgemm care face transpusa, inmultirea si
+      apoi adunarea
+    - feedback: mi se pare foarte interesanta libraria aceasta de optimizare. Este de retinut pentru viitor
+
+Valgrind check:
+  - niciuna din cele 3 implementari nu prezinta memory leaks
+
+Cache: 
+  1. I refs
+    - varianta blas foloseste cele mai putine referinte 291,930,780, iar neopt cele mai multe 5,931,375,924
+    - un down side este ca blas are cele mai multe misses
+    - prima concluzie se datoreaza faptului ca blas foloseste cele mai putine referinte la valori de buffer
+    - a 2a conluzie se datoreaza faptului ca blas face mult mai multe operatii in acelasi timp ceea ce genereaza
+      mai multe misses
+  2. D refs
+    - din punct de vedere al valorilor situatia este identica, dar diferentele sunt mai mici, adica
+      la blas este 108,566,935, iar la neopt 2,966,354,933
+    - acest lucru se intampla din aceeasi cauza ca la I
+  3. Mispred rate
+    - miss rate-ul pentru blas este de 1.5%, iar la neopt este de 0.4%
+    - asa cum ne asteptam, miss-rateul la opt este la fel ca la neopt, adica 0.4%, fiind apelata memoria
+      prin aceleasi rutine
+  Concluztii opt vs neopt:
+    - neopt are mult mai multe I refs 5,931,375,924, fata de opt care are 1,940,572,649
+    - aceasta diferenta se datoreaza registrelor folosiste in opt la sumele partiale pentru inmultirea matricilor
+      si la adunarea rezultatelor. Cu alte cuvinte, s-a facut un singur apel de memorie cu rezultatul final care partial a fost tinut in cache
+
+Grafice si Analiza comparativa: 
+  - am realizat 3 grafice. Unul pentru fiecare varianta
+  - graficele au fost realizate folosind excel
+  - Input folosit:
+    5
+    400 123 out1
+    600 123 out2
+    800 123 out3
+    1000 123 out4
+    1200 123 out5
+
+  - Output folosit la grafice:
+    ./tema2_neopt ./input_perf
+    Run=./tema2_neopt: N=400: Time=1.155696
+    Run=./tema2_neopt: N=600: Time=3.896335
+    Run=./tema2_neopt: N=800: Time=9.376368
+    Run=./tema2_neopt: N=1000: Time=17.703253
+    Run=./tema2_neopt: N=1200: Time=32.192898
+
+
+    ./tema2_opt_m ./input_perf
+    Run=./tema2_opt_m: N=400: Time=0.411429
+    Run=./tema2_opt_m: N=600: Time=1.393044
+    Run=./tema2_opt_m: N=800: Time=3.218605
+    Run=./tema2_opt_m: N=1000: Time=6.126495
+    Run=./tema2_opt_m: N=1200: Time=11.083535
+
+
+    ./tema2_blas ./input_perf
+    Run=./tema2_blas: N=400: Time=0.054987
+    Run=./tema2_blas: N=600: Time=0.152423
+    Run=./tema2_blas: N=800: Time=0.342071
+    Run=./tema2_blas: N=1000: Time=0.669345
+    Run=./tema2_blas: N=1200: Time=1.126979
+
+  - o concluzie clara pe care o putem trage este ca timpul de rulare creste direct proportional cu dimensiunea matricei in toate cele 3 variante,
+    dar axa de tendinta este are panta foarte apropiata intre cele 3
+  - timpii de rulare evident mai mici sunt la blas, asa cum era de asteptat, fiind cea mai bine optimizata varianta
+  - am ales sa folosesc acelasi seed pentru toate cele 5 teste ca sa nu introduc un element de randomizare care sa afecteze acuratetea rezultatelor
+
+
+
+
